@@ -1,0 +1,55 @@
+package board.service;
+
+import java.util.List;
+
+import board.dao.BoardDAO;
+import board.dto.Board;
+
+
+
+public class BoardServiceImpl implements BoardService{
+	
+	
+	private BoardDAO boardDAO = new BoardDAO();
+
+	@Override
+	public List<Board> list() throws Exception {
+		List<Board> boardList = boardDAO.list();
+//		logger.info("info");
+//		logger.error("error");
+//		logger.warn("warn");
+		
+		int count = boardList.size();
+//		logger.info("boardList 요소 개수 : "+count);
+//		
+//		logger.info("게시글 목록을 반환합니다.");
+		
+		return boardList;
+	}
+
+	@Override
+	public Board select(int boardNo,int temp) throws Exception {
+		Board board = boardDAO.select(boardNo,temp);
+		
+		return board;
+	}
+
+	@Override
+	public int insert(Board board) throws Exception {
+		
+		return boardDAO.insert(board);
+	}
+
+	@Override
+	public int update(Board board) throws Exception {
+		
+		return boardDAO.update(board);
+	}
+
+	@Override
+	public int delete(int boardNo) throws Exception {
+		
+		return boardDAO.delete(boardNo);
+	}
+
+}

@@ -1,0 +1,20 @@
+package com.joeun.test.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.joeun.test.dto.User;
+
+public class UserServiceImpl implements UserService{
+
+	@Autowired
+	private UserDAO userDAO;
+	
+	@Override
+	public int join(User user) {
+		
+		
+		
+		return 0;
+	}
+
+}

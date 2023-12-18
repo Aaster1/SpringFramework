@@ -1,0 +1,27 @@
+package controller;
+
+import java.util.Map;
+
+/*
+ MVC에서 Model, View 정보를 관리하는 객체
+ 
+ */
+
+public class ModelView {
+
+	Map<String,Object> model;
+	
+	String view;
+
+	public ModelView() {
+		
+	}
+	public ModelView(Map<String, Object> model, String view) {
+		super();
+		this.model = model;
+		this.view = view;
+	}
+	
+	
+	
+}

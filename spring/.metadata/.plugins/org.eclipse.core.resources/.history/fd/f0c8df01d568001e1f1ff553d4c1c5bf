@@ -1,0 +1,141 @@
+package controller;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import board.controller.BoardController;
+import board.controller.BoardReadController;
+import board.controller.BoardUpdateController;
+import board.controller.BoardUpdateProController;
+import board.dto.Board;
+
+/**
+ * Servlet implementation class FrontController
+ */
+@WebServlet("*.do")
+public class FrontController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FrontController() {
+        super();
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		
+
+		
+		
+		String view = "/index.jsp";
+		
+		boolean redirect = false;
+		
+		String reqURI = request.getRequestURI();
+		String reqPath = request.getPathInfo();
+		StringBuffer reqURL = request.getRequestURL();
+		System.out.println(reqURI);		///ServletMVC.do
+		System.out.println(reqPath);
+		System.out.println(reqURL);
+		
+		if(reqURI.contains("/board/list.do")) {
+			//BoardController 생성 및 처리
+			BoardController boarController = new BoardController();
+			try {
+				view = boarController.process(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(reqURI.contains("/board/read.do")) {
+			//BoardReadController 생성 및 처리
+			BoardReadController boarController = new BoardReadController();
+			request.setAttribute("int1", 1);
+			request.setAttribute("int2", 2);
+			try {
+				view = boarController.process(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(reqURI.contains("/board/update.do")) {
+			//BoardUpdateController 생성 및 처리
+			BoardUpdateController boarController = new BoardUpdateController();
+			request.setAttribute("int1", 0);
+			request.setAttribute("int2", 1);
+			try {
+				view = boarController.process(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(reqURI.contains("/board/updatePro.do")) {
+			//BoardReadController 생성 및 처리
+			BoardUpdateProController boarController = new BoardUpdateProController();
+			try {
+				view = boarController.process(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			redirect = true;
+		}
+		if(reqURI.contains("/board/insert.do")) {
+			//BoardReadController 생성 및 처리
+			BoardUpdateInsertController boarController = new BoardUpdateInsertController();
+			try {
+				view = boarController.process(request);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if(reqURI.contains("/board/updatePro.do")) {
+			//BoardReadController 생성 및 처리
+			BoardUpdateInsertController boarController = new BoardUpdateInsertController();
+			try {
+				view = boarController.process(request);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			redirect = true;
+		}
+		
+		
+		// request.getRequestDispatcher()의 인자는 문자열이며 경로를 입혀주면 됩니다.
+		if(redirect) {
+			response.sendRedirect(request.getContextPath()+"/"+view);
+		}else {
+			RequestDispatcher dispatcher = request.getRequestDispatcher(view);
+			dispatcher.forward(request, response);
+			
+		}
+		
+		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+}

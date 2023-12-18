@@ -1,0 +1,17 @@
+package com.joeun.test.service;
+
+import com.joeun.test.dto.User;
+
+public class UserServiceImpl implements UserService{
+
+	
+	
+	@Override
+	public int join(User user) {
+		
+		
+		
+		return 0;
+	}
+
+}

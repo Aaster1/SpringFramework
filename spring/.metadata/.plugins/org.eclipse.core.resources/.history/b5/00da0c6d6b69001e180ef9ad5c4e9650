@@ -1,0 +1,177 @@
+package board.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import board.dto.Board;
+import board.service.BoardService;
+import board.service.BoardServiceImpl;
+import controller.ModelView;
+
+/**
+ * Servlet implementation class BoardController
+ */
+public class BoardController{
+	
+	BoardService boardService = new BoardServiceImpl();
+	
+	public ModelView process(HttpServletRequest request) throws Exception{
+		ModelView modelView=new ModelView();
+		
+		String requestURI = request.getRequestURI();
+		
+		if(requestURI.contains("list.do")) {
+			list(modelView);
+		}
+		if(requestURI.contains("insert.do")) {
+			insert(modelView);
+		}
+		if(requestURI.contains("insertPro.do")) {
+			insertPro(modelView,request);
+		}
+		if(requestURI.contains("update.do")) {
+			updatePro(modelView,request);
+		}
+		if(requestURI.contains("updatePro.do")) {
+			updatePro(modelView,request);
+		}
+		if(requestURI.contains("read.do")) {
+			read(modelView,request);
+		}
+		if(requestURI.contains("deletePro.do")) {
+			deletePro(modelView,request);
+		}
+		
+		return modelView;
+	}
+
+
+	private void list(ModelView modelView) {
+		List<Board> boardList = new ArrayList<Board>();
+		try {
+			boardList = boardService.list();
+			
+		} catch (Exception e) {
+		}
+		
+		
+		
+		Map<String,Object> model = new HashMap<String,Object>();
+		
+		model.put("boardList", boardList);
+		
+		String view = "board/list.jsp";
+		
+		modelView.addModel(model);
+		modelView.setView(view);
+		
+	}
+
+	private void insertPro(ModelView modelView,HttpServletRequest request) {
+		
+	}
+	private void insertPro(ModelView modelView,HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		Board board = new Board(request.getParameter("title"),request.getParameter("writer"),request.getParameter("content"));
+		int result = 0;
+		try {
+			result = boardService.insert(board);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		Map<String,Object> model = new HashMap<String,Object>();
+		
+		model.put("board", board);
+		model.put("result", result);
+		
+		String view = "board.do";
+		
+		modelView.addModel(model);
+		modelView.setView(view);
+	}
+
+	private void updatePro(ModelView modelView,HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		Board board = new Board(request.getParameter("title"),request.getParameter("writer"),request.getParameter("content"));
+		
+		
+		int result = 0;
+		
+		try {
+			result = boardService.update(board);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+Map<String,Object> model = new HashMap<String,Object>();
+		
+		model.put("board", board);
+		model.put("result", result);
+		
+		String view = "board.do";
+		
+		modelView.addModel(model);
+		modelView.setView(view);
+	}
+
+	private void read(ModelView modelView,HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		Board board = new Board("제목","작성자","내용");
+		try {
+			board = boardService.select((int)request.getAttribute("int1"),(int)request.getAttribute("int2"));
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+Map<String,Object> model = new HashMap<String,Object>();
+		
+		model.put("board", board);
+		
+		String view = "board/read.jsp";
+		
+		modelView.addModel(model);
+		modelView.setView(view);
+	}
+
+	private void deletePro(ModelView modelView,HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		int no = request.getParameter("boardNo")==null?0 : Integer.parseInt(request.getParameter("boardNo"));
+		int result =0;
+		
+		
+		try {
+			result = boardService.delete(no);
+			
+		} catch (Exception e) {
+		}
+		Map<String,Object> model = new HashMap<String,Object>();
+		
+		model.put("no", no);
+		model.put("result", result);
+		
+		String view = "board.do";
+		
+		modelView.addModel(model);
+		modelView.setView(view);
+	}
+	
+	//게시글 목록
+	//게시글 조회
+	//게시글 등록
+	//게시글 등록 처리
+	//게시글 수정
+	//게시글 수정 처리
+	//게시글 삭제 처리
+	
+}

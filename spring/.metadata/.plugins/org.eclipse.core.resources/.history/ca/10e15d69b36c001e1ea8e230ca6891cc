@@ -1,0 +1,10 @@
+package com.joeun.test.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class UserDAO {
+
+	@Autowired
+	private 
+	
+}

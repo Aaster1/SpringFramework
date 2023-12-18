@@ -1,0 +1,12 @@
+package com.joeun.test.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class BoardDAO {
+
+	public list<Board> list(){
+		
+	}
+	
+}

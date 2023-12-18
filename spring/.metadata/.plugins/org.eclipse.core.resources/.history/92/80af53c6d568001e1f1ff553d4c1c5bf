@@ -1,0 +1,23 @@
+package board.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import board.dto.Board;
+import board.service.BoardService;
+import board.service.BoardServiceImpl;
+
+public class BoardUpdateInsertController {
+	BoardService boardService = new BoardServiceImpl();
+	
+	public String process(HttpServletRequest request) throws Exception{
+		
+		Board board = new Board(request.getParameter("title"),request.getParameter("writer"),request.getParameter("content"));
+		
+		String view = "/board/list.jsp";
+		
+		int result = boardService.update(board);
+		request.setAttribute("result", result);
+		return view;
+	}
+	
+}

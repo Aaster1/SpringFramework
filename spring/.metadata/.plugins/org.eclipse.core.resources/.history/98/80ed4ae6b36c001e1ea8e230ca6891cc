@@ -1,0 +1,15 @@
+package com.joeun.test.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+public class UserDAO {
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	public 
+	
+	
+	
+}

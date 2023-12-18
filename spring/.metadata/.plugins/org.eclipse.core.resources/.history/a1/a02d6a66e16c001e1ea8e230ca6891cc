@@ -1,0 +1,19 @@
+package com.aster.test.dao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.aster.test.dto.Member;
+
+@Repository
+public class MemberDAO {
+	
+	
+	
+	public List<Member> list(){
+		
+		
+	}
+
+}

@@ -1,0 +1,6 @@
+package com.joeun.test.dao;
+
+@Data
+public class Person {
+
+}

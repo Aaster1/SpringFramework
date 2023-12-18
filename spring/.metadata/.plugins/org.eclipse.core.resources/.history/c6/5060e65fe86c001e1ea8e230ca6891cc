@@ -1,0 +1,28 @@
+package com.aster.test.service;
+
+import java.util.List;
+
+import com.aster.test.dto.Member;
+
+@Service
+public class MemberServiceImpl implements MemberService{
+
+	@Override
+	public List<Member> list() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Member> listByTeam(int teamNo, int projectLevel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Member read(int memberNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

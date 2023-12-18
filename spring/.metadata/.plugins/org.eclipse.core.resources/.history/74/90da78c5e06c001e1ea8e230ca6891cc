@@ -1,0 +1,5 @@
+package com.aster.test.dto;
+
+public class Member {
+
+}

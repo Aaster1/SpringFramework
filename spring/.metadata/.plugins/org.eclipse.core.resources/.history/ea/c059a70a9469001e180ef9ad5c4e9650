@@ -1,0 +1,157 @@
+package com.joeun.test.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.joeun.test.dto.Board;
+import com.joeun.test.service.BoardService;
+
+@Controller
+@RequestMapping("/board")
+public class BoardController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	
+	
+	
+	@Autowired
+	private BoardService boardService;
+	
+	//게시글 목록
+	// - /board/list 로 왔을 때 list() 메소드가 실행되도록 구성합니다.
+	@RequestMapping(value="/list",method=RequestMethod.GET)		//메소드 레벨 요청 경로를 매핑합니다.
+	public String list(Locale local,Model model) {
+		List<Board> boardList = new ArrayList<Board>();
+		try {
+			boardList = boardService.list();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		model.addAttribute("boardList",boardList);
+		
+		return"board/list";		//board/list.jsp 뷰로 선택합니다.		servlet-context.xml 에서 매핑해줍니다.
+		
+		
+	}
+	@RequestMapping(value="/read",method=RequestMethod.GET,params="boardNo")
+	public String read(Locale local,Model model,@RequestParam("boardNo") int boardNo) {
+		Board board = new Board();
+		
+		try {
+
+			board = boardService.select(boardNo);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("board",board);
+		return "board/read";
+	
+	}
+	@RequestMapping(value="/insert",method=RequestMethod.GET)
+	public String insert(Locale local,Model model) {
+		
+		
+		return "board/insert";	
+	}
+	@RequestMapping(value="/insertPro",method=RequestMethod.POST, params="board")
+	public String insertPro(Locale local,Model model,@RequestParam("board") Board board) {
+		
+		int result= 0;
+		
+		
+		try {
+
+			result = boardService.insert(board);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			
+		}
+		
+		
+		
+		
+		model.addAttribute("result",result);
+		
+		return "redirect:board/list";
+	}
+	@RequestMapping(value="/update",method=RequestMethod.POST,params="boardNo")
+	public String update(Locale local,Model model,@RequestParam("boardNo") int boardNo) {
+		
+		Board board = boardService.select(boardNo);
+		model.addAttribute("boardNo",board);
+		return "board/update";
+	}
+	
+	
+	@RequestMapping(value="/updatePro",method=RequestMethod.POST,params="board")
+	public String udpatePro(Locale local,Model model,@RequestParam("board") Board board) {
+		int result = 0;
+		
+		try {
+
+			result = boardService.update(board);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		
+		model.addAttribute("result",result);
+		return "redirect:board/list";	
+	}
+	
+	@RequestMapping(value="/updatePro",method=RequestMethod.POST,params="board",headers="X-HTTP-Method-Override=PUT")
+	public String udpateProHeader(Locale local,Model model,@RequestParam("board") Board board) {
+		int result = 0;
+		
+		try {
+			
+			result = boardService.update(board);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		
+		model.addAttribute("result",result);
+		return "redirect:board/list";	
+	}
+	@RequestMapping(value="/deletePro",method=RequestMethod.GET,params="boardNo")
+	public String deletePro(Locale local,Model model, @RequestParam("boardNo") int boardNo ) {
+		
+		int result = 0;
+		try {
+			
+			result = boardService.delete(boardNo);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		model.addAttribute("result",result);
+		return "redirect:board/list";
+	}
+
+	
+	
+}

@@ -1,0 +1,5 @@
+package com.joeun.test.config;
+
+public class TransactionConfig {
+
+}

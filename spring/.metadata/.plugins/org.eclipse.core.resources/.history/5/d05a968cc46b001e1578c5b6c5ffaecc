@@ -1,0 +1,121 @@
+package com.joeun.test.common.aop;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.stereotype.Component;
+
+@EnableAspectJAutoProxy
+@Component
+@Aspect
+public class ServiceLogAdvice {
+
+	private static final Logger logger = LoggerFactory.getLogger(ServiceLogAdvice.class);
+
+	/*
+	 * 
+	 * 포인트 컷 표현요소 - 지시자 : execution - 반환값 : - 패키지 : - 클래스 : - 메소드 : - 인수 :
+	 */
+
+	@Before("execution(* com.joeun.test.service.BoardService*.*(..))")
+	public void startLog(JoinPoint jp) {
+		logger.info("Service - Before");
+		logger.info("startLog : " + jp.getSignature());
+		logger.info("startLog : " + Arrays.toString(jp.getArgs()));
+	}
+
+	@After("execution(* com.joeun.test.service.BoardService*.*(..))")
+	public void endLog(JoinPoint jp) {
+		logger.info("Service - After");
+		logger.info("endLog : " + jp.getSignature());
+		logger.info("endLog : " + Arrays.toString(jp.getArgs()));
+		logger.info("target :" + jp.getTarget().toString());
+
+		Object[] tempArr = jp.getArgs();
+
+		for (Object object : tempArr) {
+
+			logger.info("temparrEl : " + object.toString());
+
+			Signature signature = jp.getSignature();
+			String[] parameterNames=((MethodSignature) signature).getParameterNames();
+			if(parameterNames==null)return;
+			for (String param : parameterNames) {
+				
+			}
+					
+		}
+
+	}
+	
+
+	/*
+	 @Around 유형을 적용하면, @After 어드바이스는 실행되지 않는다.
+	 따라서, After, Around를 함께 사용하려면, Around 어드바이스에서 After 어드바이스를 호출해준다.
+	 */
+	
+	
+	@Around("execution(* com.joeun.test.service.BoardService*.*(..))")
+	public void aroundLog(ProceedingJoinPoint jp) {
+		logger.info("Service - Around");
+		LocalDateTime time = LocalDateTime.now();
+
+		logger.info("현재시각 : " + time);
+		//After, Around를 함께 사용하려면, Around 어드바이스에서 After 어드바이스를 호출해준다.
+		
+		try {
+			Object result = jp.proceed();
+		} catch (Throwable t) {
+			logger.error("예외가 발생했습니다.");
+			t.printStackTrace();
+			// TODO: handle exception
+		}
+		
+		endLog(jp);
+
+	}
+	
+	//returning : 타겟 메소드의 반환값을 저장하는 매개변수명 지정
+	@AfterReturning(pointcut="execution(* com.joeun.test.service.BoardService*.*(..))", returning = "result")
+	public void AfterReturningLog(JoinPoint jp, Object result) {
+		logger.info("=======================================================================================================================================");
+		logger.info("ARStartLog : " + jp.getSignature());
+		logger.info("AREndLog : " + Arrays.toString(jp.getArgs()));
+		logger.info("ARTarget :" + jp.getTarget().toString());
+		logger.info("Service - @AfterReturning");
+		
+		if(result!=null) {
+		logger.info("Result : "+result.toString());
+		}
+	}
+	
+	@AfterThrowing(pointcut="execution(* com.joeun.test.service.BoardService*.*(..))", throwing = "exception")
+	public void AfterThrowingLog(JoinPoint jp, Exception exception) {
+		logger.info("=======================================================================================================================================");
+		logger.info("ATStartLog : " + jp.getSignature());
+		logger.info("ATEndLog : " + Arrays.toString(jp.getArgs()));
+		logger.info("ATTarget :" + jp.getTarget().toString());
+		logger.info("Service - @AfterThrowing");
+		
+		if(exception!=null) {
+			logger.info("exception : "+exception.getMessage());
+		}
+	}
+	
+	
+	
+	
+}

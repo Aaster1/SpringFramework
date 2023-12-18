@@ -1,0 +1,11 @@
+package com.joeun.test.dao;
+
+import lombok.Data;
+
+@Data
+public class Person {
+
+	priavte String name;
+	private int age;
+	
+}

@@ -1,0 +1,34 @@
+package com.joeun.test.config;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@Configurable
+@EnableTransactionManagement
+public class TransactionConfig {
+
+	  	@Bean
+	     public FooRepository fooRepository() {
+	         // configure and return a class having @Transactional methods
+	         return new JdbcFooRepository(dataSource());
+	     }
+
+	     @Bean
+	     public DataSource dataSource() {
+	         // configure and return the necessary JDBC DataSource
+	    	 DriverManagerDataSource dataSource = new DriverManagerDataSource();
+	    	 dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+	    	 dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/joeun");
+	    	 dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+	     }
+
+	     @Bean
+	     public PlatformTransactionManager txManager() {
+	         return new DataSourceTransactionManager(dataSource());
+	     }
+
+}

@@ -1,0 +1,5 @@
+package com.joeun.test.service;
+
+public class BoardServiceImpl implements BoardService{
+
+}

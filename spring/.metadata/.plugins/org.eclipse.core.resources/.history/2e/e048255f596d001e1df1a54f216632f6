@@ -1,0 +1,5 @@
+package com.joeun.test.mapper;
+
+public interface BoardMapper {
+
+}

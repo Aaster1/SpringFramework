@@ -1,0 +1,28 @@
+package com.joeun.test.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.joeun.test.dto.User;
+import com.joeun.test.service.UserService;
+
+@Controller
+@RequestMapping("/user")
+public class UserController {
+
+	 @Autowired
+	 private UserService userService;
+	 
+	 @PostMapping("/join")
+	 public String join(User user) {
+		 
+		 int result = userService.join(user);
+		 
+		 
+		 return "board/list";
+		 
+	 }
+	
+}

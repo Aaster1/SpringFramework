@@ -1,0 +1,194 @@
+package com.joeun.test.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.joeun.test.dto.Board;
+import com.joeun.test.service.BoardService;
+
+/*
+ * 컨트롤러의 응답을 다뤄봅시다.
+ */
+
+
+
+@Controller
+@RequestMapping("/response")
+public class ResponseController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ResponseController.class);
+	@Autowired
+	private BoardService bs;
+	
+	//void: 요청 경로와 같은 경로의 view로 응답합니다.
+	/*
+	 * 요청 경로 : /response/index
+	 * 응답 : /response/index.jsp
+	 */
+	@RequestMapping("/index")
+	public void response() {
+		logger.info("void 타입 - /response/index");
+		logger.info("/response/index.jsp 뷰를 응답");
+		
+	}
+	
+	
+	
+	//String : 뷰 이름을 지정하여 응답한다.
+	/*
+	 * 요청 경로 : /response/view
+	 * 응답 : /reponse/index.jsp
+	 */
+	@RequestMapping("/view")
+	public String responseView() {
+		
+		logger.info("String 타입 - /response/index");
+		logger.info("/response/index.jsp 뷰를 응답");
+		logger.info("view 이름을 반환값으로 지정");
+		return "response/index";
+	}
+	
+	//매개변수로 model을 사용하는 것과 큰 차이는 없어보입니다.
+	@RequestMapping("/model/view")
+	public ModelAndView responseModelAndView() {
+		
+		logger.info("ModelAndView 타입 - /response/model/view");
+		logger.info("/response/index.jsp 뷰를 응답");
+		logger.info("모델과 뷰를 ModelAndView 객체에 지정하여 응답");
+		ModelAndView mv = new ModelAndView();
+		//뷰 이름 지정
+		mv.setViewName("/reponse/index");		//뷰 네임을 string타입으로 넘겨주면 프레임워크가 알아서 읽어 매핑합니다.
+		//모델 등록
+		Board board = new Board("제목","작성자","내용");
+		
+		mv.addObject("board",board);
+		mv.addObject("msg","ModelAndView 컨트롤러 응답...");
+		
+		return mv; 
+	}
+	
+	//class타입으로 반환하게 된다면, 알아서 기본값인(xml)타입을 반환하게 됩니다.
+	//단, @responseBody라는 어노테이션을 꼭 붙여줘야합니다.
+	@ResponseBody
+	@RequestMapping("/data/board")
+	public Board reponseBoard() {
+		
+		Board board = new Board("제목","작성자","내용");
+		
+		return board;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/data/board/list", produces = "application/json")
+	public List<Board> reponseBoardList() {
+		
+		List<Board> boardList = new ArrayList<Board>();
+		
+		try {
+			
+			boardList = bs.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return boardList;
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/data/map" , produces = "application/json")
+	public Map<String,Board> responseMap() throws Exception{
+		
+		Map<String,Board> map = new HashMap<String, Board>();
+		
+		map.put("board1", new Board("title1","writer1","content1"));
+		map.put("board2", new Board("title2","writer2","content2"));
+		map.put("board3", new Board("title3","writer3","content3"));
+		
+		return map;
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/data/entity")
+	public ResponseEntity<Void> responseEntityVoid(){
+		
+		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+	}
+	@ResponseBody
+	@RequestMapping(value="/data/entity/string")
+	public ResponseEntity<String> responseEntityString(){
+		
+		return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/data/entity/board")
+	public ResponseEntity<Board> responseEntityBoard(){
+		Board board= new Board("title","writer","content");
+		return new ResponseEntity<Board>(board,HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/data/entity/board/list")
+	public ResponseEntity<List<Board>> reponseEntityBoardList(){
+		List<Board> boardList = new ArrayList<Board>();
+		try {
+			 boardList = bs.list();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		return new ResponseEntity<>(boardList,HttpStatus.OK);		//대박사건. 이거 <>생략가능함
+		
+	}
+		
+	@ResponseBody
+	@RequestMapping(value="/data/entity/map")
+	public ResponseEntity<Map<String,Board>> responseEntityBoardMap(){
+		List<Board> boardList = new ArrayList<Board>();
+		Map<String,Board> map = new HashMap<String,Board>();
+		try {
+			boardList = bs.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		int i = 1;
+		for (Board board : boardList) {
+			map.put("board"+i++,board);
+		}
+		
+		return new ResponseEntity<>(map,HttpStatus.OK);
+		
+	}
+	
+	/*
+	 * 파일 다운로드
+	 * 
+	 * 
+	 */
+	@ResponseBody
+	@RequestMapping(value="/data/entity/map")
+	public ResponseEntity<Map<String,Board>> responseEntityBoardMap(){
+		return new ResponseEntity<>(map,HttpStatus.OK);
+		
+	}
+	
+	
+
+}

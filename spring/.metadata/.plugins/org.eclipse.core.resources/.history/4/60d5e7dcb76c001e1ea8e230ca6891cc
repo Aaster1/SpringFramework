@@ -1,0 +1,11 @@
+package com.joeun.test.service;
+
+import com.joeun.test.dto.User;
+
+public interface UserService {
+
+	public int join(User user);
+	
+	public List<User> list();
+	
+}

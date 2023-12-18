@@ -1,0 +1,5 @@
+package com.joeun.test.service;
+
+public interface UserService {
+
+}

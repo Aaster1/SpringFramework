@@ -1,0 +1,17 @@
+package com.joeun.test.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.joeun.test.dto.Board;
+
+@Repository
+public class BoardDAO {
+
+	public list<Board> list(){
+		List<Board> boardLIst = new ArrayList()<Borad>;
+	}
+	
+}

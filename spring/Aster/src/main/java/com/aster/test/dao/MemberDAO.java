@@ -1,0 +1,102 @@
+package com.aster.test.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import com.aster.test.dto.Member;
+
+@Repository
+public class MemberDAO {
+	
+	@Autowired
+	private JdbcTemplate jdbcTamplate;
+	
+	public List<Member> list(){
+		
+		
+		return jdbcTamplate.query("SELECT * FROM `member`", new RowMapper<Member>() {
+
+			@Override
+			public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Member member = new Member();
+				
+				member.setMemberNo(rs.getInt("member_no"));
+				member.setName(rs.getString("name"));
+				member.setAge(rs.getString("age"));
+				member.setGender(rs.getString("gender"));
+				member.setPhone(rs.getString("phone"));
+				member.setEmail(rs.getString("email"));
+				member.setFile(rs.getString("file"));
+				member.setPersonality(rs.getString("personality"));
+				member.setRef(rs.getString("ref"));
+				
+				
+				return member;
+			}
+			
+		});
+				
+		
+	}
+	public List<Member> listByTeam(int teamNo,int projectLevel){
+
+		String sql = "SELECT * FROM member AS m JOIN team AS t ON (m.name=t.name) WHERE t.team_no = ? AND t.proejct_level = ?";
+		
+		return jdbcTamplate.query(sql, new RowMapper<Member>() {
+			
+			@Override
+			public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Member member = new Member();
+				
+				member.setMemberNo(rs.getInt("member_no"));
+				member.setName(rs.getString("name"));
+				member.setAge(rs.getString("age"));
+				member.setGender(rs.getString("gender"));
+				member.setPhone(rs.getString("phone"));
+				member.setEmail(rs.getString("email"));
+				member.setFile(rs.getString("file"));
+				member.setPersonality(rs.getString("personality"));
+				member.setRef(rs.getString("ref"));
+				
+				
+				return member;
+			}
+			
+		},teamNo,projectLevel);
+		
+		
+	}
+	
+	public Member read(int memberNo) {
+		
+		
+		return jdbcTamplate.queryForObject("SELECT * FROM `member` WHERE member_no = ?", new RowMapper<Member>(){
+
+			@Override
+			public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Member member = new Member();
+				member.setMemberNo(rs.getInt("member_no"));
+				member.setName(rs.getString("name"));
+				member.setAge(rs.getString("age"));
+				member.setGender(rs.getString("gender"));
+				member.setPhone(rs.getString("phone"));
+				member.setEmail(rs.getString("email"));
+				member.setFile(rs.getString("file"));
+				member.setPersonality(rs.getString("personality"));
+				member.setRef(rs.getString("ref"));
+				
+				return member;
+			}
+			
+		},memberNo);
+	}
+
+	
+	
+}

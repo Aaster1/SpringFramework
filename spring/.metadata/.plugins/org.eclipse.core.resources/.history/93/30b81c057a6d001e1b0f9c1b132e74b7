@@ -1,0 +1,16 @@
+package com.joeun.test.dto;
+
+import lombok.Data;
+
+@Data
+public class Option {
+
+	private String search;
+	private int searchType;
+	
+	public Option() {
+		this.search="";
+		this.searchType=0;
+	}
+	
+}

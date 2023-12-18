@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace="매퍼 인터페이스 경로" -->
+<mapper namespace="com.joeun.test.mapper.BoardMapper">
+		<!-- sql 태그 작성 -->
+
+	<!-- 게시글 목록 -->
+	<select id="list" resultType="com.joeun.test.dto.Board">
+	SELECT board_no 'boardNo'
+		, title
+		, writer
+		, content
+		, reg_date 'regDate'
+		, upd_date 'updDate'
+		, views
+		FROM `board`
+	</select>
+	
+	<!-- 게시글 조회 -->	
+	<select id="select" resultType="com.joeun.test.dto.Board">
+	
+	</select>
+	
+	
+</mapper>

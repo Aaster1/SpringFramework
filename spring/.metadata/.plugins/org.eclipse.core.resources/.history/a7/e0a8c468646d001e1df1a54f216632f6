@@ -1,0 +1,134 @@
+package com.joeun.test.service;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.joeun.test.dto.Board;
+import com.joeun.test.mapper.BoardMapper;
+
+
+@Service
+public class BoardServiceImpl implements BoardService {
+	
+	@Autowired
+	private BoardMapper boardMapper;
+	
+	@Override
+	public List<Board> list() throws Exception {
+		System.out.println("게시글 목록을 조회합니다.");
+		
+		List<Board> boardList = boardMapper.list();
+		// System.out.println("info");
+		// logger.error("error");
+		// logger.warn("warn");
+		int count = boardList.size();
+		System.out.println("boardList 요소 개수 : " + count);
+		
+		System.out.println("게시글 목록을 반환합니다.");
+		return boardList;
+	}
+
+	@Override
+	public Board select(int boardNo) throws Exception  {
+		Board board = boardMapper.select(boardNo);
+//		String title = board.getTitle();
+		return board;
+	}
+
+	@Override
+	public int insert(Board board) throws Exception {
+		int result = boardMapper.insert(board);
+		return result;
+	}
+
+	@Override
+	public int update(Board board) throws Exception {
+		int result = boardMapper.update(new HashMap()<String,String>() {{'boardNo' : board.getBoardNo(), 'title' : board.getTitle(), 'writer' : board.getWriter(), 'content' : board.getContent()})
+
+		@Override
+		public int size() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean containsKey(Object key) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean containsValue(Object value) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public String get(Object key) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String put(String key, String value) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String remove(Object key) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void putAll(Map<? extends String, ? extends String> m) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void clear() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Set<String> keySet() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Collection<String> values() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Set<Entry<String, String>> entrySet() {
+			// TODO Auto-generated method stub
+			return null;
+		}});
+		return result;
+	}
+
+	@Override
+	public int delete(int boardNo) throws Exception {
+		int result = boardMapper.delete(boardNo);
+		return result;
+	}
+
+}
